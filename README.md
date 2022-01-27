@@ -5,6 +5,8 @@ This is an example of a CMEC module that complies with the CMEC-MDTF standard. T
 ## Installation
 Use git clone to obtain a local copy of this repository. Alternatively, to obtain a released version, go to the "Releases" section in the sidebar.
 
+The module is run via cmec-driver command line program ([code repository](https://github.com/cmecmetrics/cmec-driver)), which has its own [installation instructions](https://github.com/cmecmetrics/cmec-driver#installation).  
+
 ## Environment    
 This module depends on numpy, xarray, netcdf4, and matplotlib along with other modules from the Python standard library. An environment called '_CMEC_test_env' must be created which includes these packages.
 
@@ -21,13 +23,13 @@ The command is:
 ## Register test module  
 Activate an environment with cmec-driver installed.  
 
-`cmec-driver register example_cmec_module/`  
+`cmec-driver register path/to/example_cmec_module/`  
 
 ## Run test module  
 Activate an environment with cmec-driver installed.
-If an output directory does not already exist, create one. Use the model_directory that contains the test data set.  
+If an output directory does not already exist, create one. Use the model_directory that contains the test data set from the "Create test data" section.  
 
-`cmec-driver run model_directory/ output/ CMECTEST`  
+`cmec-driver run model_directory/ output/ CMECTEST/C1 CMECTEST/C2`  
 
 Navigate into the "output" folder to view the results. Each configuration will produce an html page that can be viewed in a browser.
 
