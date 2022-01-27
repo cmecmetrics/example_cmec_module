@@ -1,0 +1,20 @@
+{
+    "info": "Settings used for CMEC test module",
+    "obslist": {},
+    "settings": {
+        "async": "none",
+        "description": "Calculate metrics for a small test case",
+        "driver": "configuration_2/configuration2_driver.sh",
+        "name": "C2",
+        "long_name": "CMEC test case 2"
+    },
+    "varlist": {        
+        "test_var": {
+            "units": null,
+            "frequency": "mon"
+        }
+    },
+    "default_parameters": {
+        "default1": 1
+    }
+}
