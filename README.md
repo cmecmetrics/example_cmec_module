@@ -5,7 +5,7 @@ This is an example of a CMEC module that complies with the CMEC-MDTF standard. T
 ## Installation
 Use git clone to obtain a local copy of this repository. Alternatively, to obtain a released version, go to the "Releases" section in the sidebar.
 
-## Environment:  
+## Environment    
 This module depends on numpy, xarray, netcdf4, and matplotlib along with other modules from the Python standard library. An environment called '_CMEC_test_env' must be created which includes these packages.
 
 A yaml file is provided with the source code to help create this environment:  
