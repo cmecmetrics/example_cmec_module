@@ -22,3 +22,7 @@ Activate an environment with cmec-driver installed.
 If an output directory does not already exist, create one. Use the model_directory that contains the test data set.  
 
 `cmec-driver run model_directory/ output/ CMECTEST`  
+
+## License
+The CMEC example module is distributed under the terms of the BSD 3-Clause License.  
+
