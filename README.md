@@ -3,12 +3,12 @@
 This is an example of a CMEC module that complies with the CMEC-MDTF standard. The module is called "CMECTEST" and contains two configurations: C1 and C2.  
 
 ## Installation
-Use git clone to obtain a local copy of this repository. Alternatively, to obtain a released version, go to the "Releases" section in the sidebar to download a tagged release.
+Use git clone to obtain a local copy of this repository. Alternatively, to obtain a released version, go to the "Releases" section in the sidebar.
 
 ## Environment:  
 This module depends on numpy, xarray, netcdf4, and matplotlib along with other modules from the Python standard library. An environment called '_CMEC_test_env' must be created which includes these packages.
 
-A yaml file is provided with the source code to help create this environment:
+A yaml file is provided with the source code to help create this environment:  
 `conda env create -f test_env.yaml`
 
 ## Create test data  
