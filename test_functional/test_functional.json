@@ -1,12 +1,12 @@
 {
-    "info": "Settings used for CMEC test module",
+    "info": "Settings used for XWMT module",
     "obslist": {},
     "settings": {
         "async": "none",
-        "description": "Calculate metrics for a small test case",
-        "driver": "configuration_1/configuration1_driver.sh",
-        "name": "C1",
-        "long_name": "CMEC test case 1"
+        "description": "Runs functional tests for xwmt package",
+        "driver": "test_functional/test_functional_driver.sh",
+        "name": "test_functional",
+        "long_name": "XWMT Functional Test Case"
     },
     "varlist": {
         "test_var": {
