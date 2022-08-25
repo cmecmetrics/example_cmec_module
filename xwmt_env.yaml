@@ -1,0 +1,19 @@
+name: _CMEC_xwmt_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - gsw
+  - netcdf4
+  - numba
+  - numpy
+  - pandas
+  - pip
+  - pip:
+    - xwmt
+  - pylint
+  - python==3.9
+  - pytest
+  - xarray
+  - xgcm==0.5.2
+  - xhistogram==0.3.1
