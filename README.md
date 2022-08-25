@@ -1,6 +1,6 @@
-# Example CMEC Module  
+# xWMT CMEC Module
 
-This is an example of a CMEC module that complies with the CMEC-MDTF standard. The module is called "CMECTEST" and contains two configurations: C1 and C2.  
+This CMEC runs the `xWMT` water mass transformation analysis. The module is called "XWMT" and contains a functional test configuration.  
 
 ## Installation
 Use git clone to obtain a local copy of this repository. Alternatively, to obtain a released version, go to the "Releases" section in the sidebar.
@@ -8,32 +8,32 @@ Use git clone to obtain a local copy of this repository. Alternatively, to obtai
 The module is run via cmec-driver command line program ([code repository](https://github.com/cmecmetrics/cmec-driver)), which has its own [installation instructions](https://github.com/cmecmetrics/cmec-driver#installation).  
 
 ## Environment    
-This module depends on numpy, xarray, netcdf4, and matplotlib along with other modules from the Python standard library. An environment called '_CMEC_test_env' must be created which includes these packages.
+This module depends on the `xwmt` module. A conda environment called '_CMEC_xwmt_env' must be created which includes this package and its dependencies.
 
 A yaml file is provided with the source code to help create this environment:  
-`conda env create -f test_env.yaml`
+`conda env create -f xwmt_env.yaml`
 
-## Create test data  
-A script is provided to generate a test data file of approximately 1 Mb in size.   
+## Download test data  
+A script is provided to download a test data file of approximately 214 Mb in size.   
 
 The command is:  
 `python make_test_data.py model_directory`  
-"model_directory" can be the name of any existing directory. A file called "test_data_set.nc" will be written under that directory.  
+"model_directory" can be the name of any existing directory. A file called "xwmt_test_data.nc" will be written under that directory.  
 
 ## Register test module  
 Activate an environment with cmec-driver installed.  
 
-`cmec-driver register path/to/example_cmec_module/`  
+`cmec-driver register path/to/cmec_xwmt/`  
 
 ## Run test module  
 Activate an environment with cmec-driver installed.
 If an output directory does not already exist, create one. Use the model_directory that contains the test data set from the "Create test data" section.  
 
-`cmec-driver run model_directory/ output/ CMECTEST/C1 CMECTEST/C2`  
+`cmec-driver run model_directory/ output/ XWMT/test_functional`  
 
 Navigate into the "output" folder to view the results. Each configuration will produce an html page that can be viewed in a browser.
 
 ## License
-The CMEC example module is distributed under the terms of the BSD 3-Clause License.  
+The xwmt CMEC module is distributed under the terms of the BSD 3-Clause License.  
 
 LLNL-CODE-831161
