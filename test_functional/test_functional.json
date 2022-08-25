@@ -1,0 +1,20 @@
+{
+    "info": "Settings used for XWMT module",
+    "obslist": {},
+    "settings": {
+        "async": "none",
+        "description": "Runs functional tests for xwmt package",
+        "driver": "test_functional/test_functional_driver.sh",
+        "name": "test_functional",
+        "long_name": "XWMT Functional Test Case"
+    },
+    "varlist": {
+        "test_var": {
+            "units": null,
+            "frequency": "mon"
+        }
+    },
+    "default_parameters": {
+        "default1": 1
+    }
+}
