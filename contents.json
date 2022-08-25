@@ -1,11 +1,10 @@
 {
     "module": {
-        "name": "CMECTEST",
-        "long_name": "CMEC test module",
+        "name": "XWMT",
+        "long_name": "Water Mass Transformation",
         "version": "1"
     },
     "contents": [
-        "configuration_1/configuration1.json",
-        "configuration_2/configuration2.json"
+        "test_functional/test_functional.json"
     ]
 }
