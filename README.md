@@ -14,7 +14,7 @@ A yaml file is provided with the source code to help create this environment:
 `conda env create -f xwmt_env.yaml`
 
 ## Download test data  
-A script is provided to download a test data file of approximately 214 Mb in size.   
+A script is provided to download a test data file (approximately 214 MB in size).   
 
 The command is:  
 `python make_test_data.py model_directory`  
@@ -32,6 +32,19 @@ If an output directory does not already exist, create one. Use the model_directo
 `cmec-driver run model_directory/ output/ XWMT/test_functional`  
 
 Navigate into the "output" folder to view the results. Each configuration will produce an html page that can be viewed in a browser.
+
+## Full example
+A sample dataset containing 5 years of GFDL CM4 output along with processed reanalysis data for comparison is also available.
+
+A script is provided to download example data (aproximately 720 MB in size).   
+
+The command is:  
+`python make_example_data.py model_directory`  
+"model_directory" can be the name of any existing directory. Two compressed tar files will be written under that directory.
+
+Unpack the tar files before running the full example:
+tar -xzvf xwmt_input_example.tar.gz
+tar -xzvf xwmt_obs_est_cmec.tar.gz
 
 ## License
 The xwmt CMEC module is distributed under the terms of the BSD 3-Clause License.  
