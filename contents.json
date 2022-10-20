@@ -5,6 +5,7 @@
         "version": "1"
     },
     "contents": [
-        "test_functional/test_functional.json"
+        "test_functional/test_functional.json",
+        "full_example/full_example.json"
     ]
 }
