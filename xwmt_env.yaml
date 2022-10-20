@@ -4,6 +4,7 @@ channels:
   - defaults
 dependencies:
   - gsw
+  - matplotlib
   - netcdf4
   - numba
   - numpy
