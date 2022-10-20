@@ -1,0 +1,51 @@
+{
+    "info": "Settings used for XWMT full test",
+    "obslist": {},
+    "settings": {
+        "async": "none",
+        "description": "Runs full example of the xwmt package",
+        "driver": "full_example/full_example_driver.sh",
+        "name": "full_example",
+        "long_name": "XWMT Full Example Case"
+    },
+    "varlist": {
+        "areaecello": {
+          "standard_name" : "cell_area",
+          "units": "m2",
+          "dimensions": ["yh", "xh"]
+        },
+        "tos": {
+          "standard_name" : "sea_surface_temperature",
+          "units": "degC",
+          "frequency" : "mon",
+          "dimensions": ["time", "yh", "xh"]
+        },
+        "sos": {
+          "standard_name" : "sea_surface_salinity",
+          "units": "psu",
+          "frequency" : "mon",
+          "dimensions": ["time", "yh", "xh"]
+        },
+        "hfds": {
+          "standard_name" : "surface_downward_heat_flux_in_sea_water",
+          "units": "W m-2",
+          "frequency" : "mon",
+          "dimensions": ["time", "yh", "xh"]
+        },
+        "wfo": {
+          "standard_name" : "water_flux_into_sea_water",
+          "units": "kg m-2 s-1",
+          "frequency" : "mon",
+          "dimensions": ["time", "yh", "xh"]
+        },
+        "sfdsi": {
+          "standard_name" : "downward_sea_ice_basal_salt_flux",
+          "units": "kg m-2 s-1",
+          "frequency" : "mon",
+          "dimensions": ["time", "yh", "xh"]
+        }       
+    },
+    "default_parameters": {
+        "default1": 1
+    }
+}
