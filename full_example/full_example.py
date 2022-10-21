@@ -1,51 +1,47 @@
+""" full_example.py: surface watermass transformation example for CMEC """
+
 import argparse
+import glob
 import logging
+import os
 from pathlib import Path
+
+import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
-import glob
-import os
 from xwmt.swmt import swmt
-import matplotlib.pyplot as plt
 
-#
 
-import pkg_resources as pkgr
-import pytest
+def _bin_boundaries(lstr="sigma0"):
+    """sets boundaries and bin sizes"""
+    if lstr == "sigma0":
+        lmin = 10
+        lmax = 30
+        dl = 0.1
+    elif lstr == "theta":
+        lmin = -2
+        lmax = 30
+        dl = 0.5
+    elif lstr == "salt":
+        lmin = 20
+        lmax = 40
+        dl = 0.1
 
-# lambda (lstr) space
-lstr = "sigma0"  # sigma0, theta, salt
-subdir = "GFDL-CM4_historical"
-# Select spatial domain (global or basin name)
-basin_name = "pacific_tropc"  # global, atlantic, indian, pacific, southern, arctic,
-
-# Set boundaries and bin sizes
-if lstr == "sigma0":
-    lmin = 10
-    lmax = 30
-    dl = 0.1
-elif lstr == "theta":
-    lmin = -2
-    lmax = 30
-    dl = 0.5
-elif lstr == "salt":
-    lmin = 20
-    lmax = 40
-    dl = 0.1
+    return (lmin, lmax, dl)
 
 
 def read(args):
+    """Read model and reanalysis data"""
+
     rootdir = args.input
 
-    # Directory to save wmt output file (change accordingly)
-    # Model dataset used for this example (change accordingly)
     # Path for the corresponding WMT datasets generated from ECCOv4 and ERA5 reanalysis
     dset_dir = f"{args.obs}/xwmt/obs_est_cmec/data"
 
+    # List of input variables, and time-invariant static fields
     variables = ["tos", "sos", "hfds", "wfo", "sfdsi"]
     variables_static = ["areacello", "deptho", "basin"]
 
-    # For atlantic and pacific you can add _tropc, _subtN, _subpN, _subtS (e.g., atlantic_subpN, pacific_tropc)
     # Load relevant variables for surface WMT
     ds = xr.Dataset()
     for var in variables:
@@ -83,15 +79,15 @@ def read(args):
         # Remove all attributes
         ds["sfdsi"].attrs = {}
 
-    ## Loading reanalysis data
-    # Select the same time range as the model data
+    # Loading reanalysis at the same time range as the model data
     yr_st = str(ds.time.dt.year[0].values)
     yr_ed = str(ds.time.dt.year[-1].values)
 
+    # Create a dictionary to hold the precalculated reanalysis output
     ddict = {}
     for dset in ["ecco.ecco", "era5.en4"]:
         # filepath = os.path.join(dset_dir,dset.split('.')[0])
-        filename = "-".join([dset + ".G", lstr, basin_name]) + ".nc"
+        filename = "-".join([dset + ".G", args.lstr, args.basin]) + ".nc"
         print("Loading", filename)
         dset_ds = xr.open_dataset(dset_dir + "/" + filename).sel(
             time=slice(yr_st, yr_ed)
@@ -108,50 +104,58 @@ def read(args):
 
 
 def calculate(ds):
+    """Performs the surface WMT analysis on the mode dataset, ds"""
+
     # Subsample spatial domain
     bidx = [item.split("_")[0] for item in ds.basin.flag_meanings.split(" ")].index(
-        basin_name.split("_")[0]
+        args.basin.split("_")[0]
     )
 
-    if basin_name == "global":
+    # Setup masks for requested region
+    if args.basin == "global":
         mask = xr.where(ds.basin == bidx, 0, 1)
     else:
         mask = ds.basin == bidx
 
-    if basin_name[-6:] == "_tropc":
+    if args.basin[-6:] == "_tropc":
         mask = mask & (ds["lat"] <= 20) & (ds["lat"] >= -20)
-    if basin_name[-6:] == "_subtN":
+    if args.basin[-6:] == "_subtN":
         mask = mask & (ds["lat"] <= 45) & (ds["lat"] > 20)
-    if basin_name[-6:] == "_subpN":
+    if args.basin[-6:] == "_subpN":
         mask = mask & (ds["lat"] > 45)
-    if basin_name[-6:] == "_subtS":
+    if args.basin[-6:] == "_subtS":
         mask = mask & (ds["lat"] >= -45) & (ds["lat"] < -20)
 
-    # Use xwmt to calculate the surface water mass transformation for given domain
-    G = swmt(ds.where(mask)).G(lstr, bins=np.arange(lmin, lmax, dl), group_tend=False)
+    # Get bin boundaries based on choice of lambda
+    lmin, lmax, dl = _bin_boundaries(args.lstr)
 
-    # Safe output to netcdf file
+    # Use xwmt to calculate the surface water mass transformation for given domain
+    G = swmt(ds.where(mask)).G(
+        args.lstr, bins=np.arange(lmin, lmax, dl), group_tend=False
+    )
+
+    # Save wmt output to netcdf file
     fname = (
         "_".join(
             [
-                subdir + ".G",
+                args.label + ".G",
                 "%sto%s"
                 % (
                     str(G.time.dt.year[0].values).rjust(4, "0"),
                     str(G.time.dt.year[-1].values).rjust(4, "0"),
                 ),
-                lstr,
-                basin_name,
+                args.lstr,
+                args.basin,
             ]
         )
         + ".nc"
     )
-    # Add attributes?
+
     print("Saving to file:", fname)
-    G.reset_coords(drop=True).to_netcdf(args.output + fname, format="NETCDF4")
+    G.reset_coords(drop=True).to_netcdf(args.output + "/" + fname, format="NETCDF4")
 
     # Load dataset from file
-    G = xr.open_dataset(args.output + fname)
+    G = xr.open_dataset(args.output + "/" + fname)
 
     # Calculate total from thermal and haline components
     da = xr.zeros_like(G[list(G.keys())[0]]).rename("total")
@@ -163,23 +167,7 @@ def calculate(ds):
 
 
 def plot(G, ddict, yr_st, yr_ed):
-
-    # Safe output to netcdf file
-    fname = (
-        "_".join(
-            [
-                subdir + ".G",
-                "%sto%s"
-                % (
-                    str(G.time.dt.year[0].values).rjust(4, "0"),
-                    str(G.time.dt.year[-1].values).rjust(4, "0"),
-                ),
-                lstr,
-                basin_name,
-            ]
-        )
-        + ".nc"
-    )
+    """Plots the model results along with reanalysis products"""
 
     # Generate comparison figure
     fig, axs = plt.subplots(3, 1, sharex=True, figsize=(14, 8))
@@ -187,11 +175,16 @@ def plot(G, ddict, yr_st, yr_ed):
     for i, ten in enumerate(G.keys()):
         axs[i].axhline(y=0, xmin=0, xmax=1, linewidth=1.0, color="k")
         axs[i].plot(
-            G[lstr], G.mean("time")[ten] * 1e-6, c="k", lw=3, ls="-", label=subdir
+            G[args.lstr],
+            G.mean("time")[ten] * 1e-6,
+            c="k",
+            lw=3,
+            ls="-",
+            label=args.label,
         )
         for dset in ddict:
             axs[i].plot(
-                ddict[dset][lstr],
+                ddict[dset][args.lstr],
                 ddict[dset][ten] * 1e-6,
                 lw=2,
                 linestyle="-",
@@ -202,10 +195,29 @@ def plot(G, ddict, yr_st, yr_ed):
         if i == 0:
             axs[i].legend(loc="lower left", ncol=3, fontsize=12)
 
-    fig.suptitle(basin_name.capitalize() + " (%s-%s)" % (yr_st, yr_ed), fontsize=18)
+    fig.suptitle(args.basin.capitalize() + " (%s-%s)" % (yr_st, yr_ed), fontsize=18)
+
+    # Setup output name
+    fname = (
+        "_".join(
+            [
+                args.label + ".G",
+                "%sto%s"
+                % (
+                    str(G.time.dt.year[0].values).rjust(4, "0"),
+                    str(G.time.dt.year[-1].values).rjust(4, "0"),
+                ),
+                args.lstr,
+                args.basin,
+            ]
+        )
+        + ".nc"
+    )
+
+    # Save the figure
     print("Saving figure to file:", fname.replace(".nc", "_comparison.png"))
     plt.savefig(
-        args.output + fname.replace(".nc", "_comparison.png"),
+        args.output + "/" + fname.replace(".nc", "_comparison.png"),
         dpi=None,
         facecolor="w",
         edgecolor="w",
@@ -218,22 +230,45 @@ def plot(G, ddict, yr_st, yr_ed):
 
 
 if __name__ == "__main__":
+    """Main run function"""
 
+    # required runtime parameters
     parser = argparse.ArgumentParser(description="inputs for xwmt full example")
     parser.add_argument("obs", help="observational data path")
     parser.add_argument("input", help="model netCDF data path")
     parser.add_argument("output", help="output directory")
+
+    # optional arguments
+    parser.add_argument(
+        "--label", type=str, default="model", help="label string for model/experiemnt"
+    )
+    parser.add_argument(
+        "--lstr",
+        type=str,
+        default="sigma0",
+        help="lambda space ('sigma0', 'theta', or 'salt')",
+    )
+    parser.add_argument(
+        "--basin",
+        type=str,
+        default="pacific_tropc",
+        help="lambda space ('pacific_tropc', 'global', 'atlantic', 'indian', 'pacific', 'southern', 'arctic'",
+    )
+
+    # resolve all arguments
     args = parser.parse_args()
 
+    # setup logging
     log_file_name = Path(args.output) / "xwmt_full_example.log"
     logging.basicConfig(
         filename=str(log_file_name), encoding="utf-8", level=logging.INFO
     )
 
+    # change to model input directory
     logging.info("Running xwmt full example")
     os.chdir(args.input)
-    print("Hello world!", os.getcwd())
 
+    # separte functions to read data, calculate wmt, and plot results
     ds, ddict, yr_st, yr_ed = read(args)
     G = calculate(ds)
     plot(G, ddict, yr_st, yr_ed)
