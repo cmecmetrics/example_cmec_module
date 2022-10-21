@@ -71,3 +71,6 @@ Navigate into the "output" folder to view the results. Each configuration will p
 ## License
 The xwmt CMEC module is distributed under the terms of the BSD 3-Clause License.  
 LLNL-CODE-831161
+
+## Acknowledgments
+This work was performed under the auspices of the U.S. Department of Energy by Lawrence Livermore National Laboratory (LLNL) under Contract DE-AC52-07NA27344. It is a contribution to the science portfolio of the U.S. Department of Energy, Office of Science, Earth and Environmental Systems Sciences Division, Regional and Global Model Analysis Program.
