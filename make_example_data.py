@@ -30,7 +30,7 @@ if __name__ == "__main__":
         data_path = obs_path / f"{fname}.tar.gz"
         if not obs_path.exists():
             obs_path.mkdir(parents=True)
-        if not obs_path.exists():
+        if not data_path.exists():
             print(f"Downloading {fname}.tar.gz ...", end="")
             sys.stdout.flush()
             urllib.request.urlretrieve(
