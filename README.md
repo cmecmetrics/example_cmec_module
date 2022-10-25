@@ -31,7 +31,12 @@ If an output directory does not already exist, create one. Use the model_directo
 
 `cmec-driver run model_directory/ output/ CMECTEST/C1 CMECTEST/C2`  
 
-Navigate into the "output" folder to view the results. Each configuration will produce an html page that can be viewed in a browser.
+Navigate into the "output" folder to view the results. Each configuration will produce an html page that can be viewed in a browser.  
+
+## For developers  
+Please note that the following files are not required CMEC files: "LICENSE", "NOTICE".  
+
+If forking this repository to use as a template for a future module, you may with to "detach" your fork from the example_cmec_repository. For help, see [GitHub Support](https://support.github.com/request/fork).  
 
 ## License
 The CMEC example module is distributed under the terms of the BSD 3-Clause License.  
