@@ -3,7 +3,10 @@
 This is an example of a CMEC module that complies with the CMEC-MDTF standard. The module is called "CMECTEST" and contains two configurations: C1 and C2.  
 
 ## Installation
-Use git clone to obtain a local copy of this repository. Alternatively, to obtain a released version, go to the "Releases" section in the sidebar.
+The [CMEC Module Manager](https://github.com/cmecmetrics/cmec-module-man) can be used to install this module with the following command:  
+`python setup_module.py CMECTEST`  
+
+Another option is to use git clone to obtain a local copy of this repository. Alternatively, to obtain a released version, go to the "Releases" section in the sidebar.
 
 The module is run via cmec-driver command line program ([code repository](https://github.com/cmecmetrics/cmec-driver)), which has its own [installation instructions](https://github.com/cmecmetrics/cmec-driver#installation).  
 
